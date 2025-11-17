@@ -1,0 +1,31 @@
+name: 测试新浪资金流爬取（进度条 + CSV）
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/download_sina_fundflow_test.py'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run test script
+        run: python scripts/download_sina_fundflow_test.py
+
+      - name: Upload results (Parquet + CSV)
+        uses: actions/upload-artifact@v4
+        with:
+          name: fundflow-test-result-v2
+          path: output/
